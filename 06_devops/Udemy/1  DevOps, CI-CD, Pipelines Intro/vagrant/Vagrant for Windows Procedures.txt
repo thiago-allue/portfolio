@@ -1,0 +1,35 @@
+Vagrant for Windows Procedures
+
+Follow these procedures only if you want to use Vagrant with Windows.
+
+1. Download the software
+Download the latest Virtualbox from https://www.virtualbox.org/
+Download the latest Vagrant from https://www.vagrantup.com/
+Download putty and puttygen from http://www.chiark.greenend.org.uk/~sgtatham/putty/...
+2. Convert the vagrant private key
+Using puttygen you downloaded from the putty website, convert the OpenSSH private key to a putty-readable key:
+
+Make sure your vagrant box is running (vagrant up in project folder)
+Type the command vagrant ssh-config to display the ssh configuration. You can find the path to the private key next to IdentityFile
+Open puttygen
+Click on the Load button
+Navigate to the path shown by vagrant ssh-config (next to IdentityFile)
+Select the private_key
+Now click on the “Save private key” button and save the file as .ppk file somewhere where you can easily find it
+3. Use putty to log into your Vagrant machines
+Open putty and configure the following parameters:
+
+Session:
+Host: 127.0.0.1
+Port: 2222 and up (depends on how many vagrant machines you launch)
+Connection
+Data
+Auto-login username: vagrant
+Connection/SSH
+Auth
+Private key file for authentication: Click on browse and select your ppk file
+Session
+Save the session to save the parameters you just entered
+4. Alternatives
+You can also use the login/password combination “vagrant” / “vagrant”, but then you will have to enter it manually every time
+When configuring vagrant in the next lectures, I’ll often use a private IP address. You can use this private IP address with port 22 instead of 127.0.0.1:2222
