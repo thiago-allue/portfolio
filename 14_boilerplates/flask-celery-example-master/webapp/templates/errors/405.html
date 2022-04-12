@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} - Method Not Allowed{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="text-center">
+            <h1>Method Not Allowed</h1>
+            <p>Not permitted.</p>
+            <p>
+                <a class="btn btn-warning" href="{{ url_for('index') }}">Go back to the index page</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

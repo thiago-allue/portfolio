@@ -1,0 +1,11 @@
+[package]
+name = "rustlib"
+version = "0.0.1"
+authors = ["alecor Dev"]
+#build = "lib.rs"
+
+[lib]
+crate-type = ["dylib"]
+
+[dependencies]
+libc = "0.2.0"

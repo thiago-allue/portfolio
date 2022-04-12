@@ -1,0 +1,15 @@
+body {
+	padding-top: 70px;
+}
+
+.inlinelist {
+	display: inline;
+}
+
+.red {
+	color: red;
+}
+
+footer {
+	margin: 2em;
+}
