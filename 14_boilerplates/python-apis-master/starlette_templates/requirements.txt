@@ -1,4 +1,0 @@
-pytest
-starlette
-aiofiles
-uvicorn
