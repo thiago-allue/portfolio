@@ -1,0 +1,4 @@
+recursive-include webapp/templates *
+recursive-include webapp/static *
+recursive-include webapp/certs *
+recursive-include webapp/config *.yaml

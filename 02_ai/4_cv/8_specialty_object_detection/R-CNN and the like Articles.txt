@@ -1,0 +1,11 @@
+Articles
+--------⏳✅🌟
+
+✅ - Splash of Color: Instance Segmentation with Mask R-CNN and TensorFlow, 2018.
+       https://engineering.matterport.com/splash-of-color-instance-segmentation-with-mask-r-cnn-and-tensorflow-7c761e238b46
+
+
+✅- mAP (mean Average Precision) for Object Detection, 2018.
+    https://medium.com/@jonathan_hui/map-mean-average-precision-for-object-detection-45c121a31173
+
+

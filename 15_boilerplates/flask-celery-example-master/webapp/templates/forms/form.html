@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %} {% if session['logged_in'] %}
+
+<div class="row" id="publicationWrapper">
+    <div class="col-3"></div>
+    <div class="col-6 text-center">
+        <h1>Execution Publication</h1>
+        <form id="publicationForm" action="" method="post">
+            <input name="_csrf_token" type="hidden" value="asd">
+            <div class="form-group">
+                <label for="executionid">Execution ID / directory: </label>
+                <input type="text" id="executionid" name="executionid" class="form-control" aria-describedby="FFHelp"
+                    placeholder="YYYYMMDD_######_YYMMDD" pattern="\d{8}_\d{6}_\w{3,15}">
+                <small id="FFHelp" class="form-text text-muted">Directory name of the execution. You can check and
+                    search for these on <a href="{{ url_for('index') }}">Executions</a></small>
+            </div>
+            <div class="form-group">
+                <label for="runid">Run ID: </label>
+                <input type="text" id="runid" name="runid" class="form-control" aria-describedby="RunHelp" placeholder="Run ID"
+                    pattern="\w{3,15}" value="placeholder" required>
+                <small id="RunHelp" class="form-text text-muted">Run ID. This is usually placeholder for dailies, YYMMDD
+                    for dryrun and live runs.</small>
+            </div>
+            <div class="form-group">
+                <label for="cobdate">COB date: </label>
+                <input type="text" id="cobdate" name="cobdate" class="form-control" aria-describedby="COBHelp"
+                    placeholder="COB date - YYYYMMDD">
+                <small id="COBHelp" class="form-text text-muted">COB date. By default, it can be empty. Usually
+                    required for custom publications (such as unconventional dryrun).</small>
+            </div>
+            <div class="text-left">
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="createPubFinal" name="createPubFinal">
+                    <label class="form-check-label" for="createPubFinal"><small>Check to confirm creation of pub_final directory</small></label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="createPubSummary" name="createPubSummary">
+                    <label class="form-check-label" for="createPubSummary"><small>Check to confirm creation of publication_summary.csv</small></label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="runFixFiles" name="runFixFiles" checked>
+                    <label class="form-check-label" for="runFixFiles"><small>Check to confirm running fix_files inside pub_final</small></label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="v4Publication" name="v4Publication">
+                    <label class="form-check-label" for="v4Publication"><small>Check to use v4 files</small></label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="notDryPublication" name="notDryPublication">
+                    <label class="form-check-label" for="notDryPublication"><small>Check to confirm that publication should be sent</small></label>
+                </div>
+            </div>
+        </form>
+        <div><small>Perform a publication using the button below. Review provided details.</small></div>
+        <div class="button text-center">
+            <button type="submit" class="btn btn-primary" form="publicationForm">Publish</button>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+{% endif %} {% endblock %}

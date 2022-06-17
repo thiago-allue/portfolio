@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block content %}
+
+{% if session['logged_in'] %}
+<div class="row">
+    <div class="col-6">
+        <h3>Index</h3>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

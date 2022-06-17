@@ -1,0 +1,2197 @@
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 5 - AWS RDS/0_destilled.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 5 - AWS RDS/0_destilled.py b/05_cloud/AWS/Udemy AWS with Python/Section 5 - AWS RDS/0_destilled.py
+new file mode 100755
+--- /dev/null	(date 1655302969276)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 5 - AWS RDS/0_destilled.py	(date 1655302969276)
+@@ -0,0 +1,557 @@
++######################
++#    Section 5 - AWS Relational Database Service (RDS)
++#
++#####################
++
++### ./1.+CreateMInstance.py ####################################
++import boto3
++from pprint import pprint
++
++rds_client = boto3.client('rds')
++
++response = rds_client.create_db_instance(
++    DBName="rdstuts",
++    DBInstanceIdentifier="rdstuts",
++    AllocatedStorage=20,
++    DBInstanceClass='db.t2.micro',
++    Engine='MySQL',
++    MasterUsername='admins',
++    MasterUserPassword='password',
++    Port=3306,
++    EngineVersion='8.0.27',
++    PubliclyAccessible=True,
++    StorageType='gp2'
++)
++
++pprint(response)
++
++
++### ./2.+CreateDatabase.py ####################################
++import mysql.connector as mc
++
++#dbtuts
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password"
++    )
++
++    dbname = input("Please enter your database name :")
++
++    cursor = mydb.cursor()
++
++    cursor.execute("CREATE DATABASE {} ".format(dbname))
++    print("Database creatded ")
++
++except mc.Error as e:
++    print("Failed to create database {} ".format(e))
++
++
++### ./3.+CheckCon.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    print("Connection created")
++
++except mc.Error as e:
++    print("There is no connection {} ".format(e))
++
++
++### ./4.+CreateTable.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb =mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    mycursor = mydb.cursor()
++
++    mycursor.execute("CREATE TABLE Person (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), lastname VARCHAR(255))")
++    print("Table is created")
++
++except mc.Error as e:
++    print("Failed to create table {} ".format(e))
++
++
++### ./5.+ShowTable.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    mycursor = mydb.cursor()
++
++    mycursor.execute("SHOW TABLES")
++
++    for table in mycursor:
++        print(table)
++
++except mc.Error as e:
++    print("Can not show the tables {} ".format(e))
++
++
++### ./6.+InsertData.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    mycursor = mydb.cursor()
++
++    name = input("Please enter your name : ")
++    lastname = input("Please enter your lastname : ")
++
++    query = "INSERT INTO Person (name, lastname) VALUES (%s, %s)"
++    value = (name,lastname)
++
++    mycursor.execute(query, value)
++
++    mydb.commit()
++    print("Data Inserted")
++
++except mc.Error as e:
++    print("Failed to add data {} ".format(e))
++
++
++### ./7.+ShowData.py ####################################
++import mysql.connector as mc
++
++try:
++    dbname = input("Please enter the database name : ")
++    tablename = input("Please enter the table name : ")
++
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database=dbname
++    )
++
++    mycursor = mydb.cursor()
++
++    mycursor.execute("SELECT * FROM {} ".format(tablename))
++
++    result = mycursor.fetchall()
++
++    for data in result:
++        print(data)
++
++except mc.Error as e:
++    print("Can not show the data ".format(e))
++
++
++### ./8.+UpdateData.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    mycursor = mydb.cursor()
++
++    query = "UPDATE Person SET name='updated' WHERE id='1'"
++
++    mycursor.execute(query)
++    mydb.commit()
++    print(mycursor.rowcount, "record affected")
++
++except mc.Error as e:
++    print("Can not update data {} ".format(e))
++
++
++### ./9.+DeleteData.py ####################################
++import mysql.connector as mc
++
++try:
++    mydb = mc.connect(
++        host="rdstuts.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admins",
++        password="password",
++        database="dbtuts"
++    )
++
++    mycursor = mydb.cursor()
++
++    query = "DELETE FROM Person WHERE id='1'"
++
++    mycursor.execute(query)
++
++    mydb.commit()
++
++    print(mycursor.rowcount, "record affected")
++
++except mc.Error as e:
++    print("Can not delete the item {} ".format(e))
++
++### ./10.+DecribeInfo.py ####################################
++import boto3
++from pprint import pprint
++
++rds_client = boto3.client('rds')
++
++response = rds_client.describe_db_instances(
++    DBInstanceIdentifier = "rdstuts"
++)
++
++pprint(response)
++
++
++### ./11.+DeleteMySQLInstance.py ####################################
++import boto3
++
++rds_client = boto3.client('rds')
++
++response = rds_client.delete_db_instance(
++    DBInstanceIdentifier="rdstuts",
++    SkipFinalSnapshot=False,
++    FinalDBSnapshotIdentifier="rdstuts-final-snapshot",
++    DeleteAutomatedBackups=True
++
++)
++print(response)
++
++
++### ./12.+CreatePostDb.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        user="postgres",
++        password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    conn.autocommit=True
++
++    mycursor = conn.cursor()
++
++    query = "CREATE DATABASE mydb"
++
++    mycursor.execute(query)
++    print("Database created")
++
++except:
++    print("Failed to create database")
++
++
++### ./13.+CheckPostCon.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        database="mydb",
++        user="postgres",
++        password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    print("Database connected")
++
++except:
++    print("Faild to connect the database")
++
++
++### ./14.+CreateTable.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        database="mydb", user="postgres", password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    cur = conn.cursor()
++    query = "CREATE TABLE Employee (ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL, EMAIL TEXT NOT NULL)"
++    cur.execute(query)
++    conn.commit()
++    print("Table created")
++
++except:
++    print("Can not create table")
++
++
++### ./15.+InsertData.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        database="mydb", user="postgres", password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    cur = conn.cursor()
++
++    query = "INSERT INTO Employee (ID, NAME, EMAIL) VALUES (1, 'parwiz', 'par@gmail.com')"
++    cur.execute(query)
++    conn.commit()
++    print("Data has been added")
++
++except:
++    print("Can not add teh data")
++
++
++### ./16.+SelectPostData.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        database="mydb", user="postgres", password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    cur = conn.cursor()
++
++    query = "SELECT * FROM Employee"
++
++    cur.execute(query)
++
++    rows = cur.fetchall()
++
++    for data in rows:
++        print("ID : " + str(data[0]))
++        print("Name : " + data[1])
++        print("Email : " + data[2])
++
++except:
++    print("Can not read the data")
++
++
++### ./17.+UpdatePost.py ####################################
++import psycopg2
++
++
++try:
++    conn = psycopg2.connect(
++        database="mydb", user="postgres", password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    cur = conn.cursor()
++
++    query = "UPDATE Employee SET EMAIL = 'updated@gmail.com' WHERE id=1"
++    cur.execute(query)
++
++    conn.commit()
++    print("Data updated")
++    print("Total Row Affected " + str(cur.rowcount))
++
++except:
++    print("Unable to update the data")
++
++
++### ./18.+DeletePostData.py ####################################
++import psycopg2
++
++try:
++    conn = psycopg2.connect(
++        database="mydb", user="postgres", password="password",
++        host="postgresdb.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        port=5432
++    )
++
++    cur = conn.cursor()
++
++    query = "DELETE FROM Employee WHERE id=1"
++
++    cur.execute(query)
++    conn.commit()
++    print("Data deleted")
++    print("Total number of row deleted " + str(cur.rowcount))
++
++except:
++    print("Unable to delete the data")
++
++### ./20.+CheckMariaCon.py ####################################
++import mariadb
++
++try:
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++
++    )
++
++    print("There is a connection with the database")
++
++except mariadb.Error as e:
++    print("There is not any connection {} ".format(e))
++
++
++### ./21.+CreateMariaTable.py ####################################
++import mariadb
++
++try:
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++
++    cur = db.cursor()
++    cur.execute("CREATE TABLE Person (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255),lastname VARCHAR(255) )")
++    print("Table created ")
++
++except mariadb.Error as e:
++    print("Can not create table {} ".format(e))
++
++
++### ./22.+ShowMariaTable.py ####################################
++import mariadb
++
++try:
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++    cur = db.cursor()
++
++    cur.execute("SHOW TABLES")
++
++    for data in cur:
++        print(data)
++
++except mariadb.Error as e:
++    print("Can not show the table {} ".format(e))
++
++
++### ./23.+InsertMariaData.py ####################################
++import mariadb
++
++try:
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++
++    cur = db.cursor()
++
++    name = input("Please enter your name : ")
++    lastname = input("Please enter your lastname : ")
++
++    query = "INSERT INTO Person (name, lastname) VALUES (%s, %s)"
++
++    value = (name, lastname)
++
++    cur.execute(query, value)
++    db.commit()
++
++    print("Data inserted")
++
++except mariadb.Error as e:
++    print("Unable to insert data {} ".format(e))
++
++
++### ./24.+GetMariaData.py ####################################
++import mariadb
++
++try:
++    dbname = input("Please enter database name : ")
++    tblname = input("Please enter table name : ")
++
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++
++    cur = db.cursor()
++
++    cur.execute("SELECT * FROM {} ".format(tblname))
++
++    result = cur.fetchall()
++
++    for data in result:
++        print(data)
++
++except mariadb.Error as e:
++    print("Unable to get the data {} ".format(e))
++
++
++### ./25.+UpdateMariaData.py ####################################
++import mariadb
++
++try:
++    db = mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++    cur = db.cursor()
++
++    query = "UPDATE Person SET name = 'updatedname' WHERE id=3"
++
++    cur.execute(query)
++
++    db.commit()
++
++    print(cur.rowcount, "record updated")
++
++except mariadb.Error as e:
++    print("Unable to update the data {} ".format(e))
++
++
++### ./26.+DeleteMariaData.py ####################################
++import mariadb
++
++try:
++    db=mariadb.connect(
++        host="mariadbinstance.clrnsymfz2e0.us-east-1.rds.amazonaws.com",
++        user="admin",
++        password="password",
++        database="mydbexample"
++    )
++    cur = db.cursor()
++
++    query = "DELETE FROM Person WHERE id = 3"
++
++    cur.execute(query)
++
++    db.commit()
++
++    print(cur.rowcount, "record deleted")
++
++except mariadb.Error as e:
++    print("Unable to delete the data {} ".format(e))
++
++
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 6 - AWS EC2/0_destilled.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 6 - AWS EC2/0_destilled.py b/05_cloud/AWS/Udemy AWS with Python/Section 6 - AWS EC2/0_destilled.py
+new file mode 100755
+--- /dev/null	(date 1655302969275)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 6 - AWS EC2/0_destilled.py	(date 1655302969275)
+@@ -0,0 +1,185 @@
++######################
++#    Section 6 - AWS Elastic Compute Cloud (EC2)
++#
++#####################
++
++### ./1.+DescribeInstances.py ####################################
++import boto3
++from pprint import pprint
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.describe_instances()
++
++pprint(response)
++
++
++### ./2.+CreateKeyPair.py ####################################
++import boto3
++from pprint import pprint
++
++ec2_client = boto3.client('ec2')
++
++resp = ec2_client.create_key_pair(
++    KeyName = 'mykey',
++    KeyType='rsa'
++)
++
++#pprint(resp['KeyMaterial'])
++
++#store the pem file
++
++file = open('mykey.pem', 'w')
++file.write(resp['KeyMaterial'])
++file.close()
++
++
++### ./3.+CreateSecurity.py ####################################
++import boto3
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.create_security_group(
++    Description="This is desc",
++    GroupName="pygroup",
++    VpcId='vpc-027321ec9ba89707b'
++)
++
++print(response)
++
++
++### ./4.+InboundRules.py ####################################
++import boto3
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.authorize_security_group_ingress(
++    GroupId='sg-09b9ab986cbea7bcf',
++    IpPermissions=[
++        {
++            'IpProtocol':'tcp',
++            'FromPort':80,
++            'ToPort':80,
++            'IpRanges':[{'CidrIp':'0.0.0.0/0', 'Description':'My description'}]
++        },
++{
++            'IpProtocol':'tcp',
++            'FromPort':22,
++            'ToPort':22,
++            'IpRanges':[{'CidrIp':'0.0.0.0/0', 'Description':'My description'}]
++        }
++    ]
++)
++print(response)
++
++
++### ./5.+CreateInstance.py ####################################
++import boto3
++
++ec2_resource = boto3.resource('ec2')
++
++response = ec2_resource.create_instances(
++    ImageId='ami-033b95fb8079dc481',
++    MinCount=1,
++    MaxCount=1,
++    InstanceType='t2.micro',
++    KeyName='mykey',
++    SecurityGroups=[
++        'pygroup'
++    ]
++)
++print(response)
++
++
++### ./6.+GetIp.py ####################################
++import boto3
++
++
++def get_ip(instance_id):
++    ec2_client = boto3.client('ec2')
++
++    reservations = ec2_client.describe_instances(InstanceIds=[instance_id]).get('Reservations')
++
++    for reservation in reservations:
++        for instance in reservation['Instances']:
++            print(instance.get('PublicIpAddress'))
++
++get_ip('i-0cf2faaa79497a515')
++
++
++### ./7.+ListInstances.py ####################################
++import boto3
++
++
++def get_instances():
++    ec2_client = boto3.client('ec2')
++
++    reservations = ec2_client.describe_instances().get('Reservations')
++
++    for reservation in reservations:
++        for instance in reservation['Instances']:
++            instance_id = instance['InstanceId']
++            instance_type = instance['InstanceType']
++            public_ip = instance['PublicIpAddress']
++            private_ip = instance['PrivateIpAddress']
++
++            print(f"{instance_id}, {instance_type}, {public_ip}, {private_ip}")
++
++get_instances()
++
++
++### ./8.+StopInstance.py ####################################
++import boto3
++
++def stope_instance(instance_id):
++    ec2_client = boto3.client('ec2')
++    response = ec2_client.stop_instances(InstanceIds=[instance_id])
++
++    print(response)
++
++stope_instance('i-0cf2faaa79497a515')
++
++
++### ./9.+TerminateInstance.py ####################################
++import boto3
++
++def terminate_instance(instance_id):
++    ec2_client = boto3.client('ec2')
++    response = ec2_client.terminate_instances(InstanceIds=[instance_id])
++    print(response)
++
++terminate_instance('i-0cf2faaa79497a515')
++
++
++### ./10.+DescribeSecurity.py ####################################
++import boto3
++from pprint import pprint
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.describe_security_groups()
++pprint(response)
++
++
++### ./11.+DeleteSecurity.py ####################################
++import boto3
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.delete_security_group(
++    GroupId='sg-09b9ab986cbea7bcf'
++)
++print(response)
++
++
++### ./12.+DeleteKey.py ####################################
++import boto3
++
++
++ec2_client = boto3.client('ec2')
++
++response = ec2_client.delete_key_pair(
++    KeyName='mykey'
++)
++
++print(response)
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+new file mode 100755
+--- /dev/null	(date 1655303126174)
++++ b/.idea/workspace.xml	(date 1655303126174)
+@@ -0,0 +1,76 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ChangeListManager">
++    <list default="true" id="d8bd1d8b-fae2-4670-bfea-8aeb20926742" name="Changes" comment="Destilling contents from course AWS (cont)">
++      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml~71bb454... Destilling contents from course AWS (cont)" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/14_interviews/1. Coding Interview/CtCI-6th-Edition-Python-master/.idea/workspace.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/local/stackker.py" afterDir="false" />
++    </list>
++    <list id="7b2726e1-c57a-4268-9561-4e5f8c18ec19" name="Destilling contents from course AWS (cont)" comment="Destilling contents from course AWS (cont)">
++      <changelist_data name="Thiago Allue" email="thiago.allue@yahoo.com" date="1655302444000" />
++      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/02_ai/4_cv/2018, Hands-On Image Processing with Python(483p).pdf" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 2 - AWS and IAM Introduction/0_destilled.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part1.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part2.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3/0_destilled.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 5 - AWS RDS/0_destilled.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 6 - AWS EC2/0_destilled.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part1.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part2.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation/0_destilled.py" afterDir="false" />
++    </list>
++    <option name="SHOW_DIALOG" value="false" />
++    <option name="HIGHLIGHT_CONFLICTS" value="true" />
++    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
++    <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="Git.Settings">
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="ProjectId" id="2AcJ2T4EmmOiVBam3fxBP06KlhU" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
++  <component name="ProjectViewState">
++    <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showLibraryContents" value="true" />
++  </component>
++  <component name="PropertiesComponent">
++    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
++    <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="dart.analysis.tool.window.visible" value="false" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
++  </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
++  <component name="TaskManager">
++    <task active="true" id="Default" summary="Default task">
++      <created>1655302733817</created>
++      <option name="number" value="Default" />
++      <option name="presentableId" value="Default" />
++      <updated>1655302733817</updated>
++      <workItem from="1655302735115" duration="391000" />
++    </task>
++    <servers />
++  </component>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="3" />
++  </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++    <option name="oldMeFiltersMigrated" value="true" />
++  </component>
++  <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/github$stackker.coverage" NAME="stackker Coverage Results" MODIFIED="1655235682862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3" />
++    <SUITE FILE_PATH="coverage/github$stackker__1_.coverage" NAME="stackker Coverage Results" MODIFIED="1655300205488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation" />
++  </component>
++</project>
+\ No newline at end of file
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part2.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part2.py b/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part2.py
+new file mode 100755
+--- /dev/null	(date 1655302969273)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part2.py	(date 1655302969273)
+@@ -0,0 +1,98 @@
++######################
++#    Section 7 - AWS Lambda
++#
++#####################
++
++### ./1.+CreateRule.py ####################################
++import boto3
++import json
++
++iam = boto3.client('iam')
++
++role_policy = {
++
++    "Version":"2012-10-17",
++    "Statement":[
++        {
++            "Sid":"",
++            "Effect":"Allow",
++            "Principal":{
++                "Service":"lambda.amazonaws.com"
++            },
++            "Action":"sts:AssumeRole"
++        }
++
++    ]
++
++}
++response = iam.create_role(
++    RoleName='PyLambdaBasicExecution',
++    AssumeRolePolicyDocument=json.dumps(role_policy)
++)
++
++print(response)
++
++
++### ./2.+CreateLambdaFunction.py ####################################
++import boto3
++
++iam_client = boto3.client('iam')
++lambda_client = boto3.client('lambda')
++
++with open('lambda.zip', 'rb') as f:
++    zipped_code = f.read()
++
++role = iam_client.get_role(RoleName='PyLambdaBasicExecution')
++
++response = lambda_client.create_function(
++    FunctionName='helloWorldLambda',
++    Runtime='python3.9',
++    Role=role['Role']['Arn'],
++    Handler='lambda_function.lambda_handler',
++    Code=dict(ZipFile=zipped_code),
++    Timeout=300,
++
++)
++
++print(response)
++
++
++### ./3.+InvokeLambda.py ####################################
++import json
++import boto3
++
++lambda_client = boto3.client('lambda')
++
++test_event = dict()
++
++response = lambda_client.invoke(
++    FunctionName='helloWorldLambda',
++    Payload = json.dumps(test_event)
++)
++
++print(response['Payload'])
++print(response['Payload'].read().decode('utf-8'))
++
++
++### ./4.+DescribeLambda.py ####################################
++import boto3
++from pprint import pprint
++
++lambda_client = boto3.client('lambda')
++
++response = lambda_client.get_function(
++    FunctionName='helloWorldLambda'
++)
++pprint(response)
++
++
++### ./5.+DeleteLambda.py ####################################
++import boto3
++
++lambda_client = boto3.client('lambda')
++
++response = lambda_client.delete_function(
++    FunctionName='helloWorldLambda'
++)
++
++print(response)
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part1.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part1.py b/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part1.py
+new file mode 100755
+--- /dev/null	(date 1655302969274)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 7 - AWS Lambda/0_destilled_part1.py	(date 1655302969274)
+@@ -0,0 +1,188 @@
++######################
++#    Section 7 - AWS Lambda
++#
++#####################
++
++
++### ./0a.+S3+List.py ####################################
++import json
++import boto3  # python sdk and it is available in here you don't need t install
++
++s3 = boto3.resource('s3')
++
++def lambda_handler(event, context):
++
++    s3_buckets = []
++
++    for bucket in s3.buckets.all():
++        s3_buckets.append(bucket.name)
++
++    return {
++        "statusCode": 200,
++        "body": s3_buckets
++    }
++
++
++### ./0b. S3+Upload+Image.py ####################################
++import json
++import boto3
++
++def lambda_handler(event, context):
++    client = boto3.client('s3')
++
++    with open('aws.png', 'rb') as f:
++        data = f.read()
++
++    response = client.put_object(
++        Bucket="parwizforogh12",
++        Body=data,
++        Key='aws.png'
++
++    )
++    print(response)
++
++
++### ./1.+creattable.py ####################################
++import boto3
++
++def lambda_handler(event, context):
++    dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.create_table(
++        TableName='Users',
++        KeySchema=[
++            {
++                'AttributeName': 'id',
++                'KeyType': 'HASH'
++            },
++        ],
++        AttributeDefinitions=[
++            {
++                'AttributeName': 'id',
++                'AttributeType': 'N'
++            },
++        ],
++        ProvisionedThroughput={
++            'ReadCapacityUnits': 1,
++            'WriteCapacityUnits': 1,
++        }
++    )
++
++    print("Table status:", table.table_status)
++
++
++### ./2.adddata.py ####################################
++import boto3
++
++def lambda_handler(event, context):
++    db = boto3.resource('dynamodb')
++
++    table = db.Table('Users')
++
++    with table.batch_writer() as batch:
++        batch.put_item(
++            Item={
++                'id': 1,
++                'name': 'parwiz',
++                'age': '20'
++            }
++        )
++
++        batch.put_item(
++            Item={
++                'id': 2,
++                'name': 'john',
++                'age': '20'
++            }
++        )
++
++        batch.put_item(
++            Item={
++                'id': 3,
++                'name': 'abc',
++                'age': '37'
++            }
++        )
++
++
++### ./3.+getdata.py ####################################
++import boto3
++
++def lambda_handler(event, context):
++    db = boto3.resource('dynamodb')
++
++    response = db.batch_get_item(
++        RequestItems={
++            'Users': {
++                'Keys': [
++                    {
++                        'id': 1,
++
++                    },
++                    {
++                        'id': 2
++                    },
++
++                    {
++                        'id': 3
++                    }
++                ]
++            }
++        }
++    )
++
++    print(response['Responses'])
++
++
++### ./4.+querytab.py ####################################
++import boto3
++from boto3.dynamodb.conditions import Key
++
++
++def lambda_handler(event, context):
++    dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Users')
++
++    resp = table.query(
++        KeyConditionExpression=Key('id').eq(1)
++    )
++
++    if 'Items' in resp:
++        print(resp['Items'][0])
++
++
++### ./4.+update.py ####################################
++import boto3
++
++def lambda_handler(event, context):
++    dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Users')
++
++    table.update_item(
++        Key={
++            'id': 1,
++        },
++        UpdateExpression="set age = :g",
++        ExpressionAttributeValues={
++            ':g': 24
++        },
++        ReturnValues="UPDATED_NEW"
++    )
++
++
++### ./5.+deleteitem.py ####################################
++import boto3
++
++def lambda_handler(event, context):
++    dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Users')
++
++    response = table.delete_item(
++        Key={
++            'id': 1,
++        }
++    )
++    print(response)
+\ No newline at end of file
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part2.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part2.py b/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part2.py
+new file mode 100755
+--- /dev/null	(date 1655302969278)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part2.py	(date 1655302969278)
+@@ -0,0 +1,194 @@
++######################
++#    Section 3 - AWS and DynamoDB
++#
++#####################
++
++### ./1.+CreateTable.py #####################################
++import boto3
++
++def create_movie_table(dynamodb=None):
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.create_table(
++        TableName='Movies',
++        KeySchema=[
++            {
++                'AttributeName':'year',
++                'KeyType':'HASH'
++            },
++
++            {
++                'AttributeName': 'title',
++                'KeyType': 'RANGE'
++            }
++        ],
++
++        AttributeDefinitions=[
++            {
++                'AttributeName': 'year',
++                'AttributeType': 'N'
++            },
++            {
++                'AttributeName': 'title',
++                'AttributeType': 'S'
++            }
++        ],
++        ProvisionedThroughput = {
++            'ReadCapacityUnits':10,
++            'WriteCapacityUnits':10
++        }
++
++
++    )
++
++    return table
++
++
++if __name__ == "__main__":
++    movie_table = create_movie_table()
++    print("Table status : ", movie_table.table_status)
++
++
++###./2.+LoadMovie.py #####################################
++import boto3
++import json
++from decimal import Decimal
++
++def load_movie(movies, dynamodb=None):
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Movies')
++
++    for movie in movies:
++        year = int(movie['year'])
++        title = movie['title']
++        print("Adding movie : ", year, title)
++        table.put_item(Item=movie)
++
++if __name__=="__main__":
++    with open('moviedata.json') as json_file:
++        movie_list = json.load(json_file, parse_float=Decimal)
++
++    load_movie(movie_list)
++
++
++### ./3.+GetData.py #####################################
++import boto3
++from pprint import pprint
++from botocore.exceptions import ClientError
++
++def get_movie(title, year, dynamodb=None):
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Movies')
++
++    try:
++        response = table.get_item(Key={'year':year, 'title':title})
++
++    except ClientError as e:
++        print(e.response['Error']['Message'])
++
++    else:
++        return response['Item']
++
++if __name__ == "__main__":
++    movie = get_movie('The Boondock Saints', 1999)
++    if movie:
++        pprint(movie)
++
++
++### ./4.+UpdateData.py #####################################
++import boto3
++from pprint import pprint
++from decimal import Decimal
++
++def update_movie(title, year, rating, plot, dynamodb=None):
++
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Movies')
++
++    response = table.update_item(
++        Key={
++            'year':year,
++            'title':title
++        },
++        UpdateExpression="set info.rating=:r, info.plot=:p",
++        ExpressionAttributeValues = {
++            ':r': Decimal(rating),
++            ':p': plot,
++        },
++
++        ReturnValues='UPDATED_NEW'
++    )
++
++    return response
++
++if __name__ == "__main__":
++    update_response = update_movie(
++        "The Shawshank Redemption", 1994, "5.4", "This is just for testing"
++    )
++
++    pprint(update_response)
++
++
++### ./5.+DeleteMovie.py #####################################
++import boto3
++from pprint import pprint
++from botocore.exceptions import ClientError
++
++def delete_movie(title, year, dynamodb=None):
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Movies')
++
++    try:
++        response = table.delete_item(
++            Key={
++                'year':year,
++                'title':title
++            }
++        )
++
++    except ClientError as e:
++        print(e.response['Error']['Message'])
++
++    else:
++        return response
++
++if __name__ == "__main__":
++    delete_response = delete_movie("Now You See Me", 2013)
++
++    if delete_response:
++        pprint(delete_response)
++
++
++### ./6.+GetWithQuery.py  #####################################
++import boto3
++from boto3.dynamodb.conditions import Key
++
++def query_movies(year, dynamodb=None):
++    if not dynamodb:
++        dynamodb = boto3.resource('dynamodb')
++
++    table = dynamodb.Table('Movies')
++
++    response = table.query(
++        KeyConditionExpression=Key('year').eq(year)
++    )
++
++    return response['Items']
++
++if __name__ == "__main__":
++    query_year=1997
++    print("Movies from {} ".format(query_year))
++
++    movies = query_movies(query_year)
++
++    for movie in movies:
++        print(movie['year'], ":", movie['title'])
+\ No newline at end of file
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part1.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part1.py b/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part1.py
+new file mode 100755
+--- /dev/null	(date 1655302969279)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 3 - AWS DynamoDB/0_destilled_part1.py	(date 1655302969279)
+@@ -0,0 +1,214 @@
++######################
++#    Section 3 - AWS and DynamoDB
++#
++#####################
++
++### ./1.+PutData.py ##################################
++import boto3
++
++db = boto3.resource('dynamodb')
++table = db.Table('employee')
++
++table.put_item(
++    Item = {
++        'emp_id':"1",
++        'name':"Parwiz",
++        'age':28
++    }
++)
++
++
++### ./2.+ClientPut.py ##################################
++import boto3
++
++db = boto3.client('dynamodb')
++
++response = db.put_item(
++    TableName='employee',
++
++    Item = {
++        'emp_id': {
++            'S':'4'
++        },
++        'name':{
++            'S':'John'
++        },
++
++        'age': {
++            'S':'25'
++        }
++    }
++)
++
++
++### ./3.+BatchWrite.py ##################################
++db = boto3.resource('dynamodb')
++
++table = db.Table('employee')
++
++with table.batch_writer() as batch:
++    batch.put_item(
++        Item = {
++            'emp_id':'5',
++            'name':'anothername',
++            'age':'35'
++        }
++    )
++
++    batch.put_item(
++        Item = {
++            'emp_id':'6',
++            'name':'abc',
++            'age':'32'
++        }
++    )
++
++    batch.put_item(
++        Item={
++            'emp_id': '7',
++            'name': 'abc7',
++            'age': '37'
++        }
++    )
++
++
++### ./4.+GetData.py ##################################
++from pprint import pprint
++
++db = boto3.client('dynamodb')
++
++response = db.describe_table(
++    TableName = 'employee'
++)
++pprint(response)
++
++
++###  ./5.+ListTables.py ##################################
++import boto3
++
++db = boto3.client('dynamodb')
++
++response = db.list_tables()
++
++print(response['TableNames'])
++
++
++### ./6.+ChangeTable.py ##################################
++import boto3
++
++db = boto3.client('dynamodb')
++
++response = db.update_table(
++    TableName='employee',
++    BillingMode='PROVISIONED',
++
++    ProvisionedThroughput={
++        'ReadCapacityUnits':1,
++        'WriteCapacityUnits':1
++    }
++)
++
++print(response)
++
++
++###./7.+CreateBakcup.py ##################################
++import boto3
++
++db = boto3.client('dynamodb')
++
++
++'''
++response = db.create_backup(
++    TableName='employee',
++    BackupName='ArticleBackUp'
++)
++
++print(response)
++
++'''
++
++
++response = db.delete_backup(
++    BackupArn='arn:aws:dynamodb:us-east-1:651366224884:table/employee/backup/01644585631214-8e886bd4'
++
++)
++
++print(response)
++
++
++### ./7b.GetItem.py ##################################
++import boto3
++
++db = boto3.resource('dynamodb')
++
++table = db.Table('employee')
++
++response = table.get_item(
++    Key = {
++        'emp_id':"5"
++    }
++)
++
++print(response['Item'])
++
++### ./8.+GetBatch.py ##################################
++import boto3
++from pprint import pprint
++
++db = boto3.resource('dynamodb')
++
++response = db.batch_get_item(
++    RequestItems={
++        'employee':{
++            'Keys':[
++                {
++                    'emp_id':'1',
++
++                },
++                {
++                    'emp_id':'2'
++                },
++
++                {
++                    'emp_id':'3'
++                },
++
++                {
++                    'emp_id':'4'
++                }
++            ]
++        }
++    }
++)
++
++pprint(response['Responses'])
++
++
++### ./9.+GetItemClient.py ##################################
++import boto3
++
++db = boto3.client('dynamodb')
++
++response = db.get_item(
++    TableName='employee',
++    Key={
++        'emp_id':{
++            'S':'2'
++        }
++    }
++)
++
++print(response['Item'])
++
++### ./10.+ScanData.py  ##################################
++import boto3
++from pprint import pprint
++
++db = boto3.resource('dynamodb')
++
++table = db.Table('employee')
++
++response = table.scan()
++
++data = response['Items']
++pprint(data)
+\ No newline at end of file
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation/0_destilled.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation/0_destilled.py b/05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation/0_destilled.py
+new file mode 100755
+--- /dev/null	(date 1655302969272)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 8 - AWS CloudFormation/0_destilled.py	(date 1655302969272)
+@@ -0,0 +1,65 @@
++#    Section 7 - AWS Lambda
++#
++#####################
++
++### ./1.+CreateStack.py ####################################
++import boto3
++
++cf_client = boto3.client('cloudformation')
++#cf_resource = boto3.resource('cloudformation')
++
++with open('Dynamodb.yml', 'r') as f:
++    dy_template = f.read()
++    #print(dy_template)
++
++params = [
++    {
++        'ParameterKey': 'HashKeyElementName',
++        'ParameterValue':'EmployeeId'
++    }
++]
++
++response = cf_client.create_stack(
++    StackName='dynamostack',
++    TemplateBody=dy_template,
++    Parameters=params
++)
++print(response)
++
++
++### ./2.+DescribeStack.py ####################################
++import boto3
++
++cf_client = boto3.client('cloudformation')
++
++response = cf_client.describe_stacks(
++    StackName='dynamostack'
++)
++
++print(response)
++
++
++### ./3.+GetTemplate.py ####################################
++import boto3
++from pprint import pprint
++
++cf_client = boto3.client('cloudformation')
++
++response = cf_client.get_template(
++    StackName='dynamostack'
++)
++
++#pprint(response)
++pprint(response['TemplateBody'])
++
++
++### ./4.+DeleteStack.py ####################################
++import boto3
++
++cf_client = boto3.client('cloudformation')
++
++response = cf_client.delete_stack(
++    StackName='dynamostack'
++)
++
++print(response)
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 2 - AWS and IAM Introduction/0_destilled.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 2 - AWS and IAM Introduction/0_destilled.py b/05_cloud/AWS/Udemy AWS with Python/Section 2 - AWS and IAM Introduction/0_destilled.py
+new file mode 100755
+--- /dev/null	(date 1655302969280)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 2 - AWS and IAM Introduction/0_destilled.py	(date 1655302969280)
+@@ -0,0 +1,214 @@
++######################
++#    Section 2 - AWS and IAM Introduction
++#       IAM - Identity and Access Management
++#####################
++
++
++
++### 1.CREATE A USER ####################
++import boto3
++
++def create_user(username):
++    iam = boto3.client('iam')
++    response = iam.create_user(UserName=username)
++    print(response)
++
++create_user('testuser2')
++
++
++### ./2.+ListAllUsers.py  ########################
++def all_users():
++    iam = boto3.client('iam')
++
++    paginator = iam.get_paginator('list_users')
++
++    for response in paginator.paginate():
++        for user in response['Users']:
++            username = user['UserName']
++            Arn = user['Arn']
++            print('Username : {} Arn : {}'.format(username, Arn))
++
++all_users()
++
++
++### ./3.+UpdateUser.py  ########################
++def update_user(old_username, new_username):
++    iam = boto3.client('iam')
++
++    response = iam.update_user(
++        UserName=old_username,
++        NewUserName=new_username
++    )
++
++    print(response)
++
++update_user('testuser2', 'testuser')
++
++
++### /4.+CreatePolicy.py  ########################
++import json
++
++
++def create_policy():
++    iam = boto3.client('iam')
++
++    user_policy = {
++        "Version": "2012-10-17",
++        "Statement": [
++            {
++                "Effect": "Allow",
++                "Action": "*",
++                "Resource": "*"
++            }
++        ]
++    }
++
++    response = iam.create_policy(
++        PolicyName='pyFullAccess',
++        PolicyDocument=json.dumps(user_policy)
++    )
++
++    print(response)
++
++
++create_policy()
++
++
++### ./5.+ListAllPolicy.py  ########################
++def list_policies():
++    iam = boto3.client('iam')
++
++    paginator = iam.get_paginator('list_policies')
++
++    for response in paginator.paginate(Scope="AWS"):
++        for policy in response['Policies']:
++            policy_name = policy['PolicyName']
++            Arn = policy['Arn']
++
++            print('Policy Name : {} Arn : {}'.format(policy_name, Arn))
++
++list_policies()
++
++
++### ./6.+AttachPolicyUser.py  ########################
++def attach_policy(policy_arn, username):
++    iam = boto3.client('iam')
++
++    response = iam.attach_user_policy(
++        UserName=username,
++        PolicyArn=policy_arn
++    )
++    print(response)
++
++attach_policy('arn:aws:iam::aws:policy/AmazonRDSFullAccess', 'testuser')
++
++
++### ./7.+DetachUser.py  ########################
++iam = boto3.client('iam')
++
++response = iam.detach_user_policy(
++    UserName='testupdated',
++    PolicyArn='arn:aws:iam::651366224884:policy/pyFullAccess'
++)
++
++print(response)
++
++
++### ./8.+CreateGroup.py  ########################
++def create_group(group_name):
++    iam = boto3.client('iam')
++    iam.create_group(GroupName=group_name)
++
++
++create_group('S3Admins')
++
++
++### 10. ADD USER ########################
++def add_user(username, group_name):
++    iam = boto3.client('iam')
++    response = iam.add_user_to_group(
++        UserName=username,
++        GroupName=group_name
++    )
++    print(response)
++
++add_user('s3user', 'S3Admins')
++
++
++### 11. DETACH GROUP ########################
++def detach_group(user_group, arn):
++    iam = boto3.client('iam')
++
++    response = iam.detach_group_policy(
++        GroupName=user_group,
++        PolicyArn=arn
++    )
++    print(response)
++
++detach_group('RDSAdmins', 'arn:aws:iam::aws:policy/AmazonRDSFullAccess')
++
++
++### ./12.+CreateAccess.py  ########################
++'''
++def create_access(username):
++    iam = boto3.client('iam')
++
++    response = iam.create_access_key(
++        UserName=username
++    )
++
++    print(response)
++
++create_access('testuser')
++
++'''
++
++def update_access():
++    iam = boto3.client('iam')
++    iam.update_access_key(
++        AccessKeyId='AKIAZPKDT2P2K2ESBO4H',
++        Status='Inactive',
++        UserName='testuser'
++    )
++
++update_access()
++
++
++### ./13.+CreateLogin.py  ########################
++def create_login(username):
++    iam = boto3.client('iam')
++
++    login_profile = iam.create_login_profile(
++        Password='Mypassword@1',
++        PasswordResetRequired=False,
++        UserName=username
++    )
++    print(login_profile)
++
++create_login('test')
++
++
++### ./14.+DeleteUser.py  ########################
++def delete_myuser(username):
++    iam = boto3.client('iam')
++
++    response = iam.delete_user(
++        UserName=username
++    )
++    print(response)
++
++delete_myuser('test')
++
++
++### ./15.+DeleteUserFromGroup.py  ########################
++def delete_user_group(username, groupName):
++    iam = boto3.resource('iam')
++
++    group = iam.Group(groupName)
++
++    response = group.remove_user(
++        UserName=username
++    )
++    print(response)
++
++delete_user_group('s3user', 'S3Admins')
+\ No newline at end of file
+Index: 05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3/0_destilled.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3/0_destilled.py b/05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3/0_destilled.py
+new file mode 100755
+--- /dev/null	(date 1655302969277)
++++ b/05_cloud/AWS/Udemy AWS with Python/Section 4 - AWS S3/0_destilled.py	(date 1655302969277)
+@@ -0,0 +1,300 @@
++######################
++#    Section 4 - AWS Simple Storage Service (S3)
++#
++#####################
++
++
++### ./1.+CreateBucket.py ####################################
++import boto3
++
++bucket = boto3.resource('s3')
++
++response = bucket.create_bucket(
++    Bucket = "parwizforogh7777",
++    ACL="private",
++)
++
++print(response)
++
++
++### ./2.+ClientBucket.py ##################################
++import boto3
++
++client = boto3.client('s3')
++
++response = client.create_bucket(
++    Bucket = "parwizforogh12",
++    ACL = "private",
++
++)
++
++print(response)
++
++
++### ./3.+UploadingImage.py ##################################
++import boto3
++
++client = boto3.client('s3')
++
++with open('aws.png', 'rb') as f:
++    data = f.read()
++
++response = client.put_object(
++    ACL="public-read-write",
++    Bucket = "parwizforogh12",
++    Body=data,
++    Key='aws.png'
++)
++
++print(response)
++
++
++### ./4.+ListingBuckets.py ##################################
++import boto3
++
++'''
++bucket = boto3.client('s3')
++
++response = bucket.list_buckets()
++
++print("Listing all buckets")
++
++for bucket in response['Buckets']:
++    print(bucket['Name'])
++
++'''
++
++resource = boto3.resource('s3')
++
++iterator = resource.buckets.all()
++
++print("Listing all buckets")
++
++for bucket in iterator:
++    print(bucket.name)
++
++
++### ./5.+DeleteBucket.py ##################################
++import boto3
++
++'''
++client = boto3.client('s3')
++
++bucket_name = "parwizforogh7777"
++
++client.delete_bucket(Bucket=bucket_name)
++
++print("S3 Bucket has been deleted")
++
++'''
++
++#Delete bucket with aws resource
++
++resource = boto3.resource('s3')
++
++bucket_name = "parwizforogh7777"
++
++s3_bucket =resource.Bucket(bucket_name)
++
++s3_bucket.delete()
++
++print(" This {} bucket has been deleted  ".format(s3_bucket))
++
++
++### ./6.+DeleteNonEmpy.py ##################################
++import boto3
++
++BUCKET_NAME = "parwizforogh7777"
++
++s3_resource = boto3.resource('s3')
++
++s3_bucket = s3_resource.Bucket(BUCKET_NAME)
++
++def clean_up():
++    #delete the object
++    for s3_object in s3_bucket.objects.all():
++        s3_object.delete()
++
++    #delete bucket versioning
++    for s3_object_ver in s3_bucket.object_versions.all():
++        s3_object_ver.delete()
++
++    print("S3 bucket cleaned")
++
++clean_up()
++
++s3_bucket.delete()
++
++print("The bucket has been deleted")
++
++
++### ./7.+UploadFile.py ##################################
++import boto3
++
++BUCKET_NAME =   "parwizforogh12"
++
++s3_client = boto3.client('s3')
++
++def upload_files(file_name, bucket, object_name=None, args=None):
++    if object_name is None:
++        object_name = file_name
++
++    s3_client.upload_file(file_name, bucket, object_name, ExtraArgs=args)
++    print("{} has been uploaded to {} bucket".format(file_name, BUCKET_NAME))
++
++upload_files("file.txt", BUCKET_NAME)
++
++'''
++# uploading with resource
++
++BUCKET_NAME =   "parwizforogh7777"
++
++s3_client = boto3.resource('s3')
++
++def upload_files(file_name, bucket, object_name=None, args=None):
++    if object_name is None:
++        object_name = file_name
++
++    s3_client.meta.client.upload_file(file_name, bucket, object_name, ExtraArgs=args)
++    print("{} has been uploaded to {} bucket".format(file_name, BUCKET_NAME))
++
++upload_files("myfile.txt", BUCKET_NAME)
++
++'''
++
++
++### ./8.+DownloadFile.py ##################################
++import boto3
++
++BUCKET_NAME = "parwizforogh12"
++
++s3_resource = boto3.resource('s3')
++
++s3_object = s3_resource.Object(BUCKET_NAME, 'file.pdf')
++
++s3_object.download_file('downloaded.pdf')
++
++print("File has been downloaded")
++
++
++### ./9.+GetName.py ##################################
++
++import boto3
++
++BUCKET_NAME = "parwizforogh22"
++
++s3_resource = boto3.resource('s3')
++
++s3_bucket = s3_resource.Bucket(BUCKET_NAME)
++
++print("Listing Bucket Files or Objects")
++
++for obj in s3_bucket.objects.all():
++    print(obj.key)
++
++
++### ./10.+ListingFilter.py  ####################################
++import boto3
++
++BUCKET_NAME = "parwizforogh7777"
++
++s3_resource = boto3.resource('s3')
++
++s3_bucket = s3_resource.Bucket(BUCKET_NAME)
++
++print("Listing Filtered File")
++
++for obj in s3_bucket.objects.filter(Prefix="file"):
++    print(obj.key)
++
++### ./11.+GetSummary.py ####################################
++import boto3
++
++s3 = boto3.resource('s3')
++
++object_summary = s3.ObjectSummary("parwizforogh7777", "file.pdf")
++
++print(object_summary.bucket_name)
++print(object_summary.key)
++
++### ./12.+CopyObject.py ####################################
++
++import boto3
++
++s3 = boto3.resource('s3')
++
++copy_source = {
++    'Bucket': 'parwizforogh7777',
++    'Key': 'file.pdf'
++}
++
++s3.meta.client.copy(copy_source, 'parwizforogh12', 'copied.pdf')
++
++### ./13.+DeleteObjects.py ####################################
++import boto3
++
++client = boto3.resource('s3')
++
++'''
++response = client.delete_object(
++    Bucket = 'parwizforogh7777',
++    Key='file.pdf'
++)
++
++print(response)
++
++'''
++
++# delete multiple files or objects
++
++response = client.delete_objects(
++    Bucket='parwizforogh7777',
++    Delete={
++        'Objects': [
++            {
++                'Key': 'file.txt'
++            },
++
++            {
++                'Key': 'myfile.txt'
++            }
++
++        ]
++    }
++)
++
++print(response)
++
++### ./14.+GetWebsiteConfig.py ##################################
++import boto3
++from pprint import pprint
++
++client = boto3.client('s3')
++
++response = client.get_bucket_website(
++    Bucket="awstutorial12"
++)
++
++pprint(response)
++
++### ./15.+DeletePloicy.py##################################
++import boto3
++
++client = boto3.client('s3')
++
++response = client.delete_bucket_policy(
++    Bucket="awstutorial12"
++)
++
++print(response)
++
++### ./16.+DeleteWebsite.py##################################
++import boto3
++
++client = boto3.client('s3')
++
++response = client.delete_bucket_website(
++    Bucket="awstutorial12"
++)
++
++print(response)

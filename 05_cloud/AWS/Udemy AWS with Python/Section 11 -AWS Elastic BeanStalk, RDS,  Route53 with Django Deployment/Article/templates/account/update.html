@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} Add Article {% endblock %}
+
+{% block style %}
+  <style>
+    .articles {
+        width:700px;
+        margin:auto;
+
+      }
+  </style>
+
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-5 art{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} Add Article {% endblock %}
+
+{% block style %}
+  <style>
+    .articles {
+        width:700px;
+        margin:auto;
+
+      }
+  </style>
+
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-5 articles">
+    <form action="" method="POST" novalidate>
+      {{form | crispy}}
+      {% csrf_token %}
+
+      <input type="submit" value="Update Article" class="btn btn-success">
+
+
+
+    </form>
+
+  </div>
+
+{% endblock %}

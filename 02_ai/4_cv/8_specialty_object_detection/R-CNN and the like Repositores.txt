@@ -1,0 +1,26 @@
+REPOSITORIES
+------------⏳✅🌟
+
+✅ R-CNN Family Code Repositories
+   --------------------
+   ✅- Detectron2 Family - Mask R-CNN , GitHub.
+       https://github.com/matterport/Mask_RCNN (Oficial Implementation)
+       
+   ✅- paper de 2017 com 12 páginas. Estudar Full
+       
+       
+
+⏳ API’s
+   -----
+
+  ✅- xml.etree.ElementTree API.
+      https://docs.python.org/3/library/xml.etree.elementtree.html
+
+  ✅- matplotlib.patches.Rectangle API.
+      https://matplotlib.org/api/_as_gen/matplotlib.patches.Rectangle.html
+
+  ✅- matplotlib.pyplot.subplot API.
+      https://matplotlib.org/api/_as_gen/matplotlib.pyplot.subplot.html
+
+  ✅- matplotlib.pyplot.imshow API.
+      https://matplotlib.org/api/_as_gen/matplotlib.pyplot.imshow.html
