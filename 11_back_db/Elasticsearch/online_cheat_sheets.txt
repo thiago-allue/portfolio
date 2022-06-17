@@ -1,3 +1,0 @@
-https://elasticsearch-cheatsheet.jolicode.com/
-
-https://lzone.de/cheat-sheet/ElasticSearch

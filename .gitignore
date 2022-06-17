@@ -127,8 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/local/
 
-# Files with more than 100Mb
-"/02_ai/4_cv/5_Image_Processing and the like/2018, Hands-On Image Processing with Python(483p).pdf"
-
+# Large files
+"02_ai/4_cv/5_Image_Processing and the like/2018, Hands-On Image Processing with Python(483p).pdf"

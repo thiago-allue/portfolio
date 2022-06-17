@@ -1,2 +1,0 @@
-pika==1.2.0
-amqpstorm==2.9.0

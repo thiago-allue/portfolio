@@ -1,3 +1,0 @@
-recursive-include my_app/templates *
-recursive-include my_app/static *
-recursive-include my_app/translations *

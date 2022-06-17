@@ -1,3 +1,0 @@
-https://lzone.de/cheat-sheet/Redis
-
-https://cheatography.com/tasjaevan/cheat-sheets/redis/

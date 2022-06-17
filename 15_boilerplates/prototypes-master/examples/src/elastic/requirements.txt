@@ -1,3 +1,0 @@
-elasticsearch
-elasticsearch[async]
-elasticsearch-dsl
