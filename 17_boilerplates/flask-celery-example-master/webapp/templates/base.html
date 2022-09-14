@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+
+<head>
+    {% block head %}
+    <title>Portal{% block title %}{% endblock %}</title>
+    <!-- Required meta tags -->
+    {% block meta %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content=""> {% endblock %} {% block style %}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"> {% endblock %}
+    {% block addstylesheet %} {% endblock %}
+    <style type="text/css">
+        {% block css %}
+        {% endblock %}
+        body {
+            background: url("{{ url_for('static', filename='img/image.png') }}") 0% 100% no-repeat,
+            radial-gradient(at bottom left,
+            #b5c7e5 5%,
+            #aac0e2 40%,
+            #99a1ac 70%);
+            background-size: 22%, 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .loading {
+            background: transparent url("{{ url_for('static', filename='img/big-loader.gif') }}") center;
+        }
+        {% if session.env == 'dev' %}
+        .footer {
+            background-color: #63602b;
+        }
+        {% elif session.env == 'prod' %}
+        .footer {
+            background-color: #343b40;
+        }
+        {% endif %}
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    {% block body %}
+    {% include 'nav.html' %}
+    <div class="container" style="margin-top: 1em;">
+        {% block container %}
+            {% block content %} {% endblock %}
+            {% include 'flashed-messages.html' ignore missing %}
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="row">
+            <div class="col-6 text-center">
+                <p class="small" style="color: white;">Company &copy; 2019</p>
+            </div>
+            {% if session['logged_in'] %}
+            <div class="col-6 text-right">
+                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+                <select class="environment">
+                    <option value="prod">prod</option>
+                    <option value="dev">dev</option>
+                </select>
+                <span class="small" style="color: white;">v{{ version }} - Deployed @ {{ timestamp }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </footer>
+
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    {% endblock %} {% block addscripts %} {% endblock %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                /* Enable all bootstrap tooltips */
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+                /* End enable bootstrap tooltips */
+
+                {% block jsready %}
+                {% endblock %}
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

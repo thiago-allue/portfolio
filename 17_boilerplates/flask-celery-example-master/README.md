@@ -1,0 +1,1 @@
+# Example of Flask Web App to use Celery

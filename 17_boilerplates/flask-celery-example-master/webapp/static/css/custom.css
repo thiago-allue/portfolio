@@ -1,0 +1,38 @@
+.dropdown-menu {
+    font-size: 0.8rem;
+}
+body > div {
+    margin-top: 1em;
+}
+.navbar {
+    padding: .1rem 1rem;
+}
+.dropdown-item {
+    padding: 0rem 1.5rem;
+}
+
+/* Sticky footer */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 30px; /* Margin bottom by footer height */
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px; /* Set the fixed height of the footer here */
+  line-height: 30px; /* Vertically center the text there */
+  background-color: #343b40;
+}
+.top5 { margin-top:5%; }
+.top7 { margin-top:7%; }
+.top10 { margin-top:10%; }
+.top15 { margin-top:15%; }
+.top17 { margin-top:17%; }
+.top30 { margin-top:30%; }
+.m {
+    margin: 0.5em;
+}

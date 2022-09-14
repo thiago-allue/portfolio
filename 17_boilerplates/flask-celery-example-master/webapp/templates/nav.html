@@ -1,0 +1,132 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <!-- <img src="#" /> -->
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#companynav" aria-controls="companynav"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="companynav">
+            <ul class="navbar-nav mr-auto">
+                {% if session['logged_in'] %}
+                <li class="nav-item dropdown">
+                    <!-- <a class="nav-link dropdown-toggle" href="#" id="MOMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">MO</a>
+                    <div class="dropdown-menu" aria-labelledby="MOMenu">
+{#                         <h6 class="dropdown-header">Scenario and Constraints</h6>
+                        <a class="dropdown-item" href="#">Create Scenario</a>
+                        <a class="dropdown-item" href="#">Download Scenario Definition</a>
+                        <a class="dropdown-item" href="#">Upload Scenario Definition</a> #}
+                        <a class="dropdown-item" href="#">Generate Constraints</a>-->
+                        <div class="dropdown-divider"></div>
+                        <!--<h6 class="dropdown-header">Executions</h6>-->
+                        <!--<a class="dropdown-item" href="#">Fetch Data</a>-->
+                        <!--<a class="dropdown-item" href="#">Daily Run</a>-->
+                        <!--<a class="dropdown-item" href="#">Dryrun Run</a>-->
+                        <!--<a class="dropdown-item" href="#">Live Run</a>-->
+                        <!--<a class="dropdown-item" href="#">View Executions</a>-->
+                        <!--<div class="dropdown-divider"></div>-->
+                         <!-- <h6 class="dropdown-header">Utils</h6>
+                        <a class="dropdown-item" href="#">MO Generate Constraints</a>
+                        <a class="dropdown-item" href="#">MO Generate IM Summary</a>
+                        <a class="dropdown-item" href="#">MO Generate Agreement Meta</a>
+                    </div> -->
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="Dominion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Minion</a>
+                    <div class="dropdown-menu" aria-labelledby="Dominion">
+                        {# <h6 class="dropdown-header">Minion</h6> #}
+                        <!--<a class="dropdown-item" href="#">Run Minion</a>-->
+{#                         <a class="dropdown-item" href="#">Run Minion Scenario</a>
+                        <a class="dropdown-item" href="#">View Executions</a> #}
+                        <!--<div class="dropdown-divider"></div>-->
+                        <!--<a class="dropdown-item" href="#">Daily FX</a>-->
+                        <!--<a class="dropdown-item" href="#">Weekly FX</a>-->
+                        <!--<a class="dropdown-item" href="#">Weekly Equities</a>-->
+                        <!--<a class="dropdown-item" href="#">Weekly Rates</a>-->
+{#                         <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Create scenario</a>
+                        <a class="dropdown-item" href="#">Download scenario definition</a>
+                        <a class="dropdown-item" href="#">Upload scenario definition</a>
+                        <a class="dropdown-item" href="#">Generate constraints</a>
+                        <a class="dropdown-item" href="#">Generate CRIF prior</a> #}
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="Acadia" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acadia</a>
+                    <div class="dropdown-menu" aria-labelledby="Acadia">
+{#                         <h6 class="dropdown-header">Data</h6>
+                        <a class="dropdown-item" href="#">Fetch Data</a>
+                        <a class="dropdown-item" href="#">Restore Archive</a>
+                        <h6 class="dropdown-header">Publication</h6>
+                        <a class="dropdown-item" href="#">Publication</a>
+                        <a class="dropdown-item" href="#">Custom Directory Publication</a>
+                        <a class="dropdown-item" href="#">Check Published Files</a>
+                        <a class="dropdown-item" href="#">TRTN Preparation</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header">General</h6>
+                        <a class="dropdown-item" href="#">Local LCH Data</a>
+                        <a class="dropdown-item" href="#">Remote LCH Data (Acadia)</a>
+                        <a class="dropdown-item" href="#">Download LCH Data</a> #}
+                    </div>
+                </li>
+                <!--<li class="nav-item dropdown">-->
+                    <!--<a class="nav-link dropdown-toggle" href="#" id="RefDataMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Reference Data</a>-->
+                    <!--<div class="dropdown-menu" aria-labelledby="RefDataMenu">-->
+                        <!--<h6 class="dropdown-header">Reference Data Options</h6>-->
+                        <!--<a class="dropdown-item" href="#">Download Reference Data</a>-->
+                        <!--<a class="dropdown-item" href="#">Upload Reference Data</a>-->
+                    <!--</div>-->
+                <!--</li>-->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="UtilsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Utils</a>
+                    <div class="dropdown-menu" aria-labelledby="UtilsMenu">
+                        <h6 class="dropdown-header">Utilities</h6>
+                        <a class="dropdown-item" href="#">View CSV/Excel as table</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="debugMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logs</a>
+                    <div class="dropdown-menu" aria-labelledby="debugMenu">
+{#                         <h6 class="dropdown-header">Logs and Debug Info</h6>
+                        <a class="dropdown-item" href="#">SIMM Automation Logs</a>
+                        <a class="dropdown-item" href="#">SIMM Automation Streaming Log</a>
+                        <a class="dropdown-item" href="#">SIMM Web Portal logs</a>
+                        <!--<div class="dropdown-divider"></div>-->
+                        <!--<h6 class="dropdown-header">FX mighty_oak</h6>-->
+                        <!--<a class="dropdown-item" href="#" target="_blank">02 Logs</a>-->
+                        <!--<a class="dropdown-item" href="#" target="_blank">03 Logs</a>-->
+                        <h6 class="dropdown-header">Minion</h6>
+                        <a class="dropdown-item" href="#">SIMM Minion Logs</a>
+                        <a class="dropdown-item" href="#">SIMM Minion Streaming Log</a>
+                        <h6 class="dropdown-header">Historical Logs</h6>
+                        <a class="dropdown-item" href="#">List and View Historical Logs</a>
+                        <a class="dropdown-item" href="#">Minion Individual Runs Logs</a>
+ #}                    </div>
+                </li>
+                {% endif %}
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                    <div class="dropdown-menu" aria-labelledby="adminMenu">
+                        <h6 class="dropdown-header">Admin</h6>
+                        <a class="dropdown-item" href="#">Generate Password</a>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    {% if not session.logged_in %}
+                    <a href="{{ url_for('login') }}" class="btn btn-info btn-sm">Log in</a>
+                    {% else %}
+                    <a href="{{ url_for('logout') }}" class="btn btn-info btn-sm">Log out</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
