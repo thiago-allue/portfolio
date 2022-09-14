@@ -1,0 +1,21 @@
+body{
+    background-color : #b1e6ad;
+}
+
+.top-container{
+    background-color: #ded68c;
+    height:200px;
+    width:200px;
+}
+
+.middle-container {
+    background-color: #586ebf;
+    width:200px;
+    height:200px;
+}
+
+.bottom-container {
+    background-color: #d07b99;
+    width:200px;
+    height:200px;
+}

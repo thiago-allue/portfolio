@@ -1,0 +1,5 @@
+
+~javascript:S11721"]Remove the unused function parameter "res" or rename it to "_res" to make intention explicit.(¬§Òàÿÿÿÿÿ
+]javascript:S1126z"<Replace this if-then-else flow by a single return statement.(€Èž´ûÿÿÿÿ
+javascript:S1172"]Remove the unused function parameter "res" or rename it to "_res" to make intention explicit.(¬§Òàÿÿÿÿÿ
+zjavascript:S1172§"]Remove the unused function parameter "err" or rename it to "_err" to make intention explicit.(¨à¢È
